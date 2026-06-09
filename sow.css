@@ -1,0 +1,28 @@
+/* ============================================================
+   Ingrid SOW — shared brand tokens + field system
+   Used by the directions gallery and the full document build.
+   ============================================================ */
+
+@font-face { font-family:'Reckless'; src:url('fonts/Reckless-Regular.ttf') format('truetype'); font-weight:400 500; font-style:normal; font-display:swap; }
+@font-face { font-family:'Reckless'; src:url('fonts/Reckless-RegularItalic.ttf') format('truetype'); font-weight:400 500; font-style:italic; font-display:swap; }
+@font-face { font-family:'PP Neue Montreal'; src:url('fonts/PPNeueMontreal-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'PP Neue Montreal'; src:url('fonts/PPNeueMontreal-SemiBold.woff2') format('woff2'); font-weight:500 600; font-style:normal; font-display:swap; }
+
+:root{
+  --black:#000; --white:#fff;
+  --grey-dark:#A59F98; --grey-medium:#D4D0CB; --grey-light:#F5F1EB;
+  --lavender:#732DD9; --lavender-medium:#AD83E9; --lavender-light:#EBDCFA; --lavender-light-50:#F5EDFD;
+  --lav-dark:#3C1D67;
+  --magenta:#9C27B0; --magenta-light:#F4DEF8;
+  --ink:#0A0A0A; --milk:#F5F1EB; --paper:#fff;
+  --mute:#A59F98; --line:#D4D0CB; --line-soft:#EAE7E2;
+  --border-1:rgba(0,0,0,0.12); --border-2:rgba(0,0,0,0.06);
+  --ok:#2E7D4F; --warn:#B03030;
+  --font-serif:"Reckless",Georgia,serif;
+  --font-sans:"PP Neue Montreal","Helvetica Neue",Arial,sans-serif;
+  --ease-out:cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast:120ms; --dur-base:220ms; --dur-slow:420ms;
+  --shadow-pop:0 24px 60px rgba(17,17,17,0.12);
+}
+
+*{ box-sizing:border-box; }
