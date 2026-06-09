@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ingrid — Statement of Work</title>
+<link rel="stylesheet" href="sow.css" />
+<link rel="stylesheet" href="sow-doc.css" />
+</head>
+<body>
+
+<!-- ===================== APP TOOLBAR (screen only) ===================== -->
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="tb-brand">
+      <img src="assets/ingrid-wordmark-black.svg" alt="Ingrid" />
+      <div class="div"></div>
+      <span class="tb-doclabel">SOW</span>
+      <span class="tb-customer" id="tbCustomer"><span>Customer:</span> —</span>
+    </div>
+    <div class="tb-progress">
+      <div class="tb-prog-row">
+        <span class="tb-prog-label tb-prog-label--you">Customer</span>
+        <div class="tb-track"><div class="tb-fill tb-fill--you" data-progress-bar="you"></div></div>
+        <span class="tb-pct"><b data-progress-pct="you">0%</b></span>
+        <span class="tb-pct tb-prog-count" data-progress-count="you">0 of 0</span>
+      </div>
+      <div class="tb-prog-row">
+        <span class="tb-prog-label tb-prog-label--ingrid">Ingrid</span>
+        <div class="tb-track"><div class="tb-fill tb-fill--ingrid" data-progress-bar="ingrid"></div></div>
+        <span class="tb-pct"><b data-progress-pct="ingrid">0%</b></span>
+        <span class="tb-pct tb-prog-count" data-progress-count="ingrid">0 of 0</span>
+      </div>
+    </div>
+    <div class="tb-actions">
+      <a href="dashboard.html" class="tb-btn" id="btnBack" style="display:none;text-decoration:none;">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+        Dashboard
+      </a>
+      <span class="tb-saved" id="savedNote"><span class="pulse"></span>Auto-saved</span>
+      <button class="tb-btn" id="btnImport" title="Load saved answers from a file">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10V2M5 5l3-3 3 3M2.5 10v3a1 1 0 001 1h9a1 1 0 001-1v-3"/></svg>
+        Import
+      </button>
+      <button class="tb-btn" id="btnExport" title="Download answers as a file">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M5 7l3 3 3-3M2.5 11v2a1 1 0 001 1h9a1 1 0 001-1v-2"/></svg>
+        Export
+      </button>
+      <button class="tb-btn" id="btnShare" title="Copy a pre-filled link to send">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9.5l3-3M5 11l-1 1a2.1 2.1 0 01-3-3l2-2a2.1 2.1 0 013 0M11 5l1-1a2.1 2.1 0 013 3l-2 2a2.1 2.1 0 01-3 0"/></svg>
+        Copy link
+      </button>
+      <button class="tb-btn tb-btn--primary" id="btnPdf" title="Download as PDF">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6V2.5a.5.5 0 01.5-.5h7a.5.5 0 01.5.5V6M4 12H3a1 1 0 01-1-1V7a1 1 0 011-1h10a1 1 0 011 1v4a1 1 0 01-1 1h-1M4 10h8v3.5a.5.5 0 01-.5.5h-7a.5.5 0 01-.5-.5z"/></svg>
+        Download PDF
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="locked-banner" id="lockedBanner" hidden style="background:#2E7D4F;color:#fff;text-align:center;padding:10px 0;font:14px var(--font-sans,sans-serif)">This SOW is locked — read only</div>
+
+<input type="file" id="fileInput" accept="application/json,.json" hidden />
+
+<div class="wrap">
+<div class="doc" id="doc">
+
+  <!-- masthead -->
+  <div class="mast">
+    <img src="assets/ingrid-wordmark-black.svg" alt="Ingrid" />
+    <div class="doc-ref">APPENDIX 3 — STATEMENT OF WORK<br />Version 2.0 · Confidential</div>
+  </div>
+  <p class="doc-eyebrow">Implementation Scoping Document</p>
+  <h1 class="doc-title">Statement of Work</h1>
+  <p class="doc-sub">This appendix sets out Ingrid's understanding of your technical environment and how Ingrid's platform will be used, as advised by you. It covers product scope, integration responsibilities, and the agreed timeline for billing and go-live.</p>
+
+  <div class="legend" style="margin-top:26px;margin-bottom:18px">
+    <span class="lbl">Key</span>
+    <span class="who who--you"><span class="dot"></span>Customer completes</span>
+    <span class="who who--ingrid"><span class="dot"></span>Ingrid completes</span>
+  </div>
+
+  <div class="identity">
+    <div class="field">
+      <label class="field-label">Customer / brand <span class="req">*</span></label>
+      <p class="field-help">The legal or trading name this SOW covers</p>
+      <input class="ctl-text" data-key="customer-name" id="customerName" placeholder="e.g. Paul Smith Ltd" />
+    </div>
+    <div class="field">
+      <label class="field-label">Primary contact</label>
+      <p class="field-help">Who at your team owns this document</p>
+      <input class="ctl-text" data-key="primary-contact" placeholder="Name · email" />
+    </div>
+  </div>
+
+  <!-- ===================== 1. EXECUTIVE SUMMARY ===================== -->
+  <section class="sec">
+    <div class="sechead">
+      <span class="secnum">1</span>
+      <div>
+        <h2 class="sectitle">Executive summary</h2>
+        <p class="seccap">The objective of this engagement and the headline outcomes you're aiming for.</p>
+      </div>
+    </div>
+
+    <div class="provided">
+      <span class="tag-inline">Objective · provided by Ingrid</span>
+      <p>This Statement of Work captures Ingrid's understanding of the Customer's technical environment and the initial specification of how Ingrid's platform will be used. It defines the product scope, integration responsibilities, and the timeline agreed for billing and project go-live.</p>
+    </div>
+
+    <div class="field" style="margin-top:18px">
+      <label class="field-label">Business objectives &amp; success criteria <span class="req">*</span></label>
+      <p class="field-help">What does success look like? e.g. "Reduce delivery-related support tickets by 20%" or "Launch in-store stock at checkout across UK stores"</p>
+      <textarea class="ctl-area" data-key="biz-objectives" placeholder="List the outcomes and success criteria for this implementation…"></textarea>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ===================== 2. SCOPE OVERVIEW ===================== -->
+  <section class="sec" data-owner="ingrid">
+    <div class="sechead">
+      <span class="secnum">2</span>
+      <div>
+        <h2 class="sectitle">Scope overview</h2>
+        <p class="seccap">The Ingrid and partner products included in this implementation.</p>
+      </div>
+    </div>
+
+    <div class="subhead">
+      <span class="subnum">2.1</span>
+      <h3 class="subtitle">Ingrid products</h3>
+      <span class="who who--ingrid"><span class="dot"></span>Ingrid: scope &amp; tier</span>
+      <span class="who who--you"><span class="dot"></span>Customer: go-live</span>
+    </div>
+    <p class="field-help" style="margin:-4px 0 10px">Product scope &amp; tier are set by Ingrid; you provide the target go-live date for each product in scope. Product descriptions are found here: <a href="https://support.ingrid.com/space/KB/614400006/Ingrid+product+overview" target="_blank" rel="noopener">support.ingrid.com/Ingrid-product-overview</a></p>
+    <div class="prod-list">
+      <div class="prod-head">
+        <div class="prod-main"></div>
+        <div class="prod-tier">Tier</div>
+        <div class="prod-golive">Target go-live</div>
+        <div class="prod-seg-h">Included</div>
+      </div>
+      <div class="prod-row">
+        <div class="prod-main"><div class="prod-name">Checkout</div><div class="prod-desc">Delivery options at the point of checkout</div></div>
+        <div class="prod-tier"><select class="ctl-select" data-key="tier-checkout"><option value="">Tier…</option><option>Basic</option><option>Pro</option><option>Enterprise</option></select></div>
+        <div class="prod-golive" data-owner="you"><input class="ctl-text" data-key="golive-checkout" data-optional placeholder="DD MMM YYYY" /></div>
+        <div class="seg" data-key="prod-checkout"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div>
+      </div>
+      <div class="prod-row">
+        <div class="prod-main"><div class="prod-name">Tracking</div><div class="prod-desc">Post-purchase tracking experience</div></div>
+        <div class="prod-tier"><select class="ctl-select" data-key="tier-tracking"><option value="">Tier…</option><option>Basic</option><option>Pro</option></select></div>
+        <div class="prod-golive" data-owner="you"><input class="ctl-text" data-key="golive-tracking" data-optional placeholder="DD MMM YYYY" /></div>
+        <div class="seg" data-key="prod-tracking"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div>
+      </div>
+      <div class="prod-row">
+        <div class="prod-main"><div class="prod-name">Returns</div><div class="prod-desc">Self-service returns &amp; exchanges</div></div>
+        <div class="prod-tier"></div>
+        <div class="prod-golive" data-owner="you"><input class="ctl-text" data-key="golive-returns" data-optional placeholder="DD MMM YYYY" /></div>
+        <div class="seg" data-key="prod-returns"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div>
+      </div>
+      <div class="prod-row">
+        <div class="prod-main"><div class="prod-name">Transport</div><div class="prod-desc">Carrier &amp; transport automation</div></div>
+        <div class="prod-tier"></div>
+        <div class="prod-golive" data-owner="you"><input class="ctl-text" data-key="golive-transport" data-optional placeholder="DD MMM YYYY" /></div>
+        <div class="seg" data-key="prod-transport"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div>
+      </div>
+      <div class="prod-row">
+        <div class="prod-main"><div class="prod-name">In-store</div><div class="prod-desc">In-store fulfilment &amp; stock at checkout</div></div>
+        <div class="prod-tier"></div>
+        <div class="prod-golive" data-owner="you"><input class="ctl-text" data-key="golive-instore" data-optional placeholder="DD MMM YYYY" /></div>
+        <div class="seg" data-key="prod-instore"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div>
+      </div>
+    </div>
+
+    <div class="subhead">
+      <span class="subnum">2.2</span>
+      <h3 class="subtitle">Included partner products</h3>
+      <span class="who who--ingrid"><span class="dot"></span>Ingrid completes</span>
+    </div>
+    <div class="prod-list">
+      <div class="prod-row">
+        <div class="prod-main"><div class="prod-name">Loqate</div><div class="prod-desc">Address validation &amp; autocomplete</div></div>
+        <div class="seg" data-key="partner-loqate"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div>
+      </div>
+    </div>
+
+    <div class="subhead">
+      <span class="subnum">2.3</span>
+      <h3 class="subtitle">Special considerations</h3>
+      <span class="who who--ingrid"><span class="dot"></span>Ingrid completes</span>
+    </div>
+    <div data-owner="ingrid">
+      <p class="field-help" style="margin:-4px 0 10px">Any caveats, exclusions, or product-specific notes for the included products — e.g. "Address form not included," "Tracking page uses standard template only."</p>
+      <textarea class="ctl-area" data-key="special-considerations" placeholder="Call out any special considerations for the included products…"></textarea>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ===================== 3. CUSTOMER SETUP ===================== -->
+  <section class="sec">
+    <div class="sechead">
+      <span class="secnum">3</span>
+      <div>
+        <h2 class="sectitle">Customer setup</h2>
+        <p class="seccap">Your sales channels, markets, and the systems Ingrid will operate alongside.</p>
+      </div>
+    </div>
+
+    <div class="subhead">
+      <span class="subnum">3.1</span>
+      <h3 class="subtitle">Sales channels &amp; markets</h3>
+      <span class="who who--you"><span class="dot"></span>Customer completes</span>
+    </div>
+    <p class="field-help" style="margin:-4px 0 10px">List each storefront / brand you'll run through Ingrid. Add a row per market.</p>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:34%">Website / brand</th>
+        <th style="width:18%">Type</th>
+        <th style="width:22%">Region</th>
+        <th>Annual order vol.</th>
+        <th class="cell-del"></th>
+      </tr></thead>
+      <tbody data-list="sales"></tbody>
+    </table>
+    <button class="btn-add" data-add="sales"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>Add channel</button>
+
+    <div class="subhead">
+      <span class="subnum">3.2</span>
+      <h3 class="subtitle">Systems landscape</h3>
+      <span class="who who--you"><span class="dot"></span>Customer completes</span>
+    </div>
+    <p class="field-help" style="margin:-4px 0 10px">The systems in place at the time of go-live, and whether each needs an Ingrid integration.</p>
+    <table class="tbl">
+      <thead><tr><th style="width:32%">System type</th><th>Platform name</th><th style="width:140px">Integration?</th></tr></thead>
+      <tbody>
+        <tr><td class="sys-type">eCommerce<small>Storefront platform</small></td><td><input class="ctl-text" data-key="sys-ecom" placeholder="e.g. Shopify Plus, Centra" /></td><td><div class="seg" data-key="int-ecom"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div></td></tr>
+        <tr><td class="sys-type">OMS<small>Order management</small></td><td><input class="ctl-text" data-key="sys-oms" placeholder="e.g. Brightpearl" /></td><td><div class="seg" data-key="int-oms"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div></td></tr>
+        <tr><td class="sys-type">WMS / 3PL<small>Warehouse / fulfilment</small></td><td><input class="ctl-text" data-key="sys-wms" placeholder="e.g. Ongoing WMS, Bleckmann" /></td><td><div class="seg" data-key="int-wms"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div></td></tr>
+        <tr><td class="sys-type">TMS<small>Transport management</small></td><td><input class="ctl-text" data-key="sys-tms" placeholder="e.g. nShift" /></td><td><div class="seg" data-key="int-tms"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div></td></tr>
+        <tr><td class="sys-type">ERP<small>Enterprise resource</small></td><td><input class="ctl-text" data-key="sys-erp" placeholder="e.g. Microsoft Dynamics" /></td><td><div class="seg" data-key="int-erp"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div></td></tr>
+        <tr><td class="sys-type">CDP<small>Customer data</small></td><td><input class="ctl-text" data-key="sys-cdp" placeholder="e.g. Klaviyo" /></td><td><div class="seg" data-key="int-cdp"><button class="seg-btn">Yes</button><button class="seg-btn is-no">No</button></div></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ===================== 4. INTEGRATIONS ===================== -->
+  <section class="sec" data-owner="ingrid">
+    <div class="sechead">
+      <span class="secnum">4</span>
+      <div>
+        <h2 class="sectitle">Integrations &amp; responsibilities</h2>
+        <p class="seccap">As a rule, Ingrid builds, enables and maintains each integration and its APIs (e.g. the Shopify plugin and that it works); the customer installs and operates it in their web shop. Record the lead party for each below — docs at <a href="https://developer.ingrid.com/" target="_blank" rel="noopener">developer.ingrid.com</a>.</p>
+      </div>
+      <span class="who who--ingrid"><span class="dot"></span>Ingrid completes</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:30%">Platform name</th>
+        <th style="width:26%">Lead responsibility</th>
+        <th>Notes / Documentation</th>
+        <th class="cell-del"></th>
+      </tr></thead>
+      <tbody data-list="integrations"></tbody>
+    </table>
+    <button class="btn-add" data-add="integrations"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>Add integration</button>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ===================== 5. CARRIER SCOPE ===================== -->
+  <section class="sec">
+    <div class="sechead">
+      <span class="secnum">5</span>
+      <div>
+        <h2 class="sectitle">Carrier scope</h2>
+        <p class="seccap">Supported carriers &amp; products are listed at <a href="https://carrier.ingrid.com" target="_blank" rel="noopener">carrier.ingrid.com</a> (set Direction Type = Return for Ingrid Returns).</p>
+      </div>
+    </div>
+
+    <div class="subhead">
+      <span class="subnum">5.1</span>
+      <h3 class="subtitle">Carrier credentials</h3>
+      <span class="who who--you"><span class="dot"></span>Customer completes</span>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label class="field-label">Credentials owned by</label>
+        <p class="field-help">Who holds the carrier contracts &amp; logins</p>
+        <select class="ctl-select" data-key="cred-owner"><option value="">Select…</option><option>Customer</option><option>3PL provider</option><option>Other</option></select>
+      </div>
+      <div class="field">
+        <label class="field-label">If other / notes</label>
+        <p class="field-help">Optional — name the party or add context</p>
+        <input class="ctl-text" data-key="cred-notes" data-optional placeholder="e.g. Held by Bleckmann on our behalf" />
+      </div>
+    </div>
+
+    <div class="subhead">
+      <span class="subnum">5.2</span>
+      <h3 class="subtitle">Outbound delivery carrier products</h3>
+      <span class="who who--you"><span class="dot"></span>Customer completes</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:23%">Origin country</th><th style="width:23%">Destination countries</th>
+        <th style="width:27%">Carrier name</th><th>Product / service code</th><th class="cell-del"></th>
+      </tr></thead>
+      <tbody data-list="outbound"></tbody>
+    </table>
+    <button class="btn-add" data-add="outbound"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>Add outbound product</button>
+
+    <div class="subhead">
+      <span class="subnum">5.3</span>
+      <h3 class="subtitle">Returns carrier products</h3>
+      <span class="who who--you"><span class="dot"></span>Customer completes</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:23%">Origin country</th><th style="width:23%">Destination countries</th>
+        <th style="width:27%">Carrier name</th><th>Product / service code</th><th class="cell-del"></th>
+      </tr></thead>
+      <tbody data-list="returns"></tbody>
+    </table>
+    <button class="btn-add" data-add="returns"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>Add returns product</button>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ===================== 6. TIMELINE ===================== -->
+  <section class="sec" data-owner="ingrid">
+    <div class="sechead">
+      <span class="secnum">6</span>
+      <div>
+        <h2 class="sectitle">Timeline &amp; go-live plan</h2>
+        <p class="seccap">The key dates that anchor the project. Ingrid will confirm these with you.</p>
+      </div>
+      <span class="who who--ingrid"><span class="dot"></span>Ingrid completes</span>
+    </div>
+    <div class="subhead"><span class="subnum">6.1</span><h3 class="subtitle">Key dates</h3></div>
+    <table class="tbl">
+      <thead><tr><th style="width:40%">Milestone</th><th>Target date</th></tr></thead>
+      <tbody>
+        <tr><td class="sys-type">Project start</td><td><input class="ctl-text" data-key="ms-start" placeholder="DD MMM YYYY" /></td></tr>
+        <tr><td class="sys-type">Integration complete</td><td><input class="ctl-text" data-key="ms-integration" placeholder="DD MMM YYYY" /></td></tr>
+        <tr><td class="sys-type">Testing</td><td><input class="ctl-text" data-key="ms-testing" placeholder="DD MMM YYYY" /></td></tr>
+        <tr><td class="sys-type">Go-live</td><td><input class="ctl-text" data-key="ms-golive" placeholder="DD MMM YYYY" /></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ===================== 7. ROLES ===================== -->
+  <section class="sec">
+    <div class="sechead">
+      <span class="secnum">7</span>
+      <div>
+        <h2 class="sectitle">Roles &amp; responsibilities</h2>
+        <p class="seccap">The named owners on both teams for the duration of the project.</p>
+      </div>
+    </div>
+    <div class="roles">
+      <div data-owner="ingrid">
+        <div class="subhead" style="margin-top:0"><h3 class="subtitle">Ingrid team</h3><span class="who who--ingrid"><span class="dot"></span>Ingrid completes</span></div>
+        <div class="role-line"><div class="role-role">Implementation Lead</div><input class="ctl-text" data-key="ing-impl" placeholder="Name · email" /></div>
+        <div class="role-line"><div class="role-role">Integration Specialist</div><input class="ctl-text" data-key="ing-integration" placeholder="Name · email" /></div>
+        <div class="role-line"><div class="role-role">Customer Success Manager</div><input class="ctl-text" data-key="ing-csm" placeholder="Name · email" /></div>
+      </div>
+      <div>
+        <div class="subhead" style="margin-top:0"><h3 class="subtitle">Customer team</h3><span class="who who--you"><span class="dot"></span>Customer completes</span></div>
+        <div class="role-line"><div class="role-role">Project Lead</div><input class="ctl-text" data-key="cust-project" placeholder="Name · email" /></div>
+        <div class="role-line"><div class="role-role">Technical Lead</div><input class="ctl-text" data-key="cust-technical" placeholder="Name · email" /></div>
+        <div class="role-line"><div class="role-role">Ingrid Admin<small>Day-to-day platform owner</small></div><input class="ctl-text" data-key="cust-admin" placeholder="Name · email" /></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- ===================== 8. DEV REQUESTS ===================== -->
+  <section class="sec" data-owner="ingrid">
+    <div class="sechead">
+      <span class="secnum">8</span>
+      <div>
+        <h2 class="sectitle">Product development requests</h2>
+        <p class="seccap">Any feature requests raised for this engagement, with Ingrid's delivery expectation for each.</p>
+      </div>
+      <span class="who who--ingrid"><span class="dot"></span>Ingrid completes</span>
+    </div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:40%">Requested feature</th>
+        <th style="width:26%">Status</th>
+        <th>Est. delivery</th>
+        <th class="cell-del"></th>
+      </tr></thead>
+      <tbody data-list="devreq"></tbody>
+    </table>
+    <button class="btn-add" data-add="devreq"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>Add request</button>
+  </section>
+
+  <div class="footer-note">
+    Appendix 3 — Statement of Work · Confidential. This document records the agreed scope at the time of completion and forms part of your Ingrid agreement. Your progress is saved automatically in this browser; use <b>Export</b> or <b>Copy link</b> to share a version with Ingrid.
+  </div>
+
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // TODO: Replace with your Supabase project values
+  window.SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+  window.SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+</script>
+<script src="api.js"></script>
+<script src="sow-app.js"></script>
+</body>
+</html>

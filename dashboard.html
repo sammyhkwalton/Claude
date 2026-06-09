@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ingrid — Statements of Work</title>
+<link rel="stylesheet" href="sow.css" />
+<link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+
+<!-- ===================== TOP APP BAR ===================== -->
+<header class="appbar">
+  <div class="appbar-inner">
+    <div class="ab-brand">
+      <img src="assets/ingrid-wordmark-black.svg" alt="Ingrid" />
+      <div class="div"></div>
+      <span class="ab-doclabel">SOW Manager</span>
+    </div>
+    <nav class="ab-nav">
+      <a href="#" class="is-active">Statements of Work</a>
+      <a href="#">Customers</a>
+      <a href="#">Templates</a>
+    </nav>
+    <div class="ab-spacer"></div>
+    <label class="ab-search">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M14 14l-3.2-3.2"/></svg>
+      <input id="search" type="text" placeholder="Search customer or ID…" />
+    </label>
+    <div class="ab-avatar" title="Ingrid user">ML</div>
+    <button id="btnLogout" title="Sign out" style="background:transparent;border:1px solid var(--border-1);color:var(--mute);font-family:var(--font-sans);font-size:12.5px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:all .15s;">Sign out</button>
+  </div>
+</header>
+
+<!-- ===================== PAGE ===================== -->
+<main class="page">
+
+  <div class="page-head">
+    <div>
+      <p class="page-eyebrow">Implementation</p>
+      <h1 class="page-title">Statements of Work</h1>
+      <p class="page-sub">Every SOW you've opened with a customer. Ingrid scopes the products and timeline; the customer fills in their environment. Lock a SOW when it's agreed.</p>
+    </div>
+    <button class="btn-new" id="btnNew">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+      New SOW
+    </button>
+  </div>
+
+  <div class="toolrow">
+    <div class="filters">
+      <button class="chip is-active" data-filter="all">All <span class="n">0</span></button>
+      <button class="chip" data-filter="draft">Draft <span class="n">0</span></button>
+      <button class="chip" data-filter="customer">With customer <span class="n">0</span></button>
+      <button class="chip" data-filter="review">In review <span class="n">0</span></button>
+      <button class="chip" data-filter="complete">Complete <span class="n">0</span></button>
+    </div>
+    <div class="legend">
+      <span>Completion</span>
+      <span class="lg"><span class="sw sw--you"></span><b>Customer</b></span>
+      <span class="lg"><span class="sw sw--ingrid"></span><b>Ingrid</b></span>
+    </div>
+  </div>
+
+  <section class="list" id="list"><!-- rendered by dashboard.js --></section>
+
+</main>
+
+<!-- ===================== NEW-SOW DIALOG ===================== -->
+<div class="scrim" id="newScrim">
+  <div class="dialog" role="dialog" aria-modal="true" aria-label="New statement of work">
+    <h2>New statement of work</h2>
+    <p class="dsub">Ingrid creates the SOW. The customer is invited to complete their sections once you share the link.</p>
+
+    <div class="dgrid">
+      <div class="dfield span2">
+        <label class="dlabel" for="newCust">Customer / brand <span class="req">*</span></label>
+        <input class="dctl" id="newCust" type="text" placeholder="e.g. Ellis Brigham" />
+      </div>
+      <div class="dfield span2">
+        <label class="dlabel" for="newRegion">Markets</label>
+        <input class="dctl" id="newRegion" type="text" placeholder="e.g. UK · SE · EU" />
+      </div>
+      <div class="dfield span2">
+        <label class="dlabel">Products in scope</label>
+        <div class="prodpick">
+          <span class="pp" data-prod="Checkout">Checkout</span>
+          <span class="pp" data-prod="Tracking">Tracking</span>
+          <span class="pp" data-prod="Returns">Returns</span>
+          <span class="pp" data-prod="Transport">Transport</span>
+          <span class="pp" data-prod="In-store">In-store</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button class="btn-ghost" id="newCancel">Cancel</button>
+      <button class="btn-solid" id="newCreate">Create SOW</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LOCK DIALOG (Ingrid-only) ===================== -->
+<div class="scrim" id="lockScrim">
+  <div class="dialog" role="dialog" aria-modal="true" aria-label="Lock statement of work">
+    <div class="lockicon">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="10" height="7" rx="1.4"/><path d="M5 7V4.6a3 3 0 016 0V7"/></svg>
+    </div>
+    <h2>Lock "<span id="lockCust">this SOW</span>"?</h2>
+    <p class="dsub">Locking marks the SOW <b>Complete</b> and makes it read-only for everyone — Ingrid and customer alike. Use this once both sides have agreed the scope.</p>
+    <div class="lock-note">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.3"/><path d="M8 5v3.5M8 11h.01"/></svg>
+      <span>Only Ingrid can lock or unlock a SOW. You can reopen it later if changes are needed.</span>
+    </div>
+    <div class="dialog-actions">
+      <button class="btn-ghost" id="lockCancel">Cancel</button>
+      <button class="btn-solid" id="lockConfirm">Lock &amp; mark complete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // TODO: Replace with your Supabase project values
+  window.SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+  window.SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+</script>
+<script src="api.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>
