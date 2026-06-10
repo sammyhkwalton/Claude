@@ -1,27 +1,39 @@
-/* Ingrid SOW — Supabase API layer */
+/* Ingrid SOW — Supabase API layer (password-auth, no Supabase Auth) */
 (function (global) {
   'use strict';
 
-  // Config injected by deployer in each HTML file as:
-  // window.SUPABASE_URL = 'https://xxx.supabase.co';
-  // window.SUPABASE_ANON_KEY = 'eyJ...';
-  // Falls back to placeholders so the page renders for setup.
-
-  var URL = global.SUPABASE_URL || '';
+  var SUPABASE_URL = global.SUPABASE_URL || '';
   var KEY = global.SUPABASE_ANON_KEY || '';
+  var ADMIN_PW = global.INGRID_ADMIN_PASSWORD || '';
+  var LS_KEY = 'sow:ingrid';
 
-  var authToken = null; // set after login
-  var currentUser = null;
+  /* ---- admin password check ---- */
+  function checkPassword(pw) {
+    if (pw !== ADMIN_PW) return false;
+    try { localStorage.setItem(LS_KEY, '1'); } catch (e) {}
+    return true;
+  }
 
-  /* ---- low-level fetch wrappers ---- */
+  function restoreSession() {
+    try { return localStorage.getItem(LS_KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function logout() {
+    try { localStorage.removeItem(LS_KEY); } catch (e) {}
+  }
+
+  function isIngrid() {
+    return restoreSession();
+  }
+
+  /* ---- low-level fetch ---- */
   function headers(extra) {
-    var h = { 'apikey': KEY, 'Content-Type': 'application/json' };
-    if (authToken) h['Authorization'] = 'Bearer ' + authToken;
+    var h = { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json' };
     return Object.assign(h, extra || {});
   }
 
   function rest(path, opts) {
-    return fetch(URL + '/rest/v1' + path, Object.assign({ headers: headers() }, opts))
+    return fetch(SUPABASE_URL + '/rest/v1' + path, Object.assign({ headers: headers() }, opts))
       .then(function (r) {
         if (!r.ok) return r.json().then(function (e) { throw e; });
         var ct = r.headers.get('content-type') || '';
@@ -30,9 +42,9 @@
   }
 
   function rpc(fn, body) {
-    return fetch(URL + '/rest/v1/rpc/' + fn, {
+    return fetch(SUPABASE_URL + '/rest/v1/rpc/' + fn, {
       method: 'POST',
-      headers: headers({ 'Content-Type': 'application/json' }),
+      headers: headers(),
       body: JSON.stringify(body || {})
     }).then(function (r) {
       if (!r.ok) return r.json().then(function (e) { throw e; });
@@ -41,43 +53,7 @@
     });
   }
 
-  /* ---- auth ---- */
-  function login(email, password) {
-    return fetch(URL + '/auth/v1/token?grant_type=password', {
-      method: 'POST',
-      headers: { 'apikey': KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, password: password })
-    }).then(function (r) {
-      return r.json().then(function (d) {
-        if (!r.ok) throw d;
-        authToken = d.access_token;
-        currentUser = d.user;
-        try { localStorage.setItem('sow:session', JSON.stringify({ token: authToken, user: currentUser })); } catch (e) {}
-        return d;
-      });
-    });
-  }
-
-  function restoreSession() {
-    try {
-      var s = localStorage.getItem('sow:session');
-      if (!s) return false;
-      var d = JSON.parse(s);
-      authToken = d.token;
-      currentUser = d.user;
-      return true;
-    } catch (e) { return false; }
-  }
-
-  function logout() {
-    authToken = null; currentUser = null;
-    try { localStorage.removeItem('sow:session'); } catch (e) {}
-  }
-
-  function getUser() { return currentUser; }
-  function isIngrid() { return !!authToken; }
-
-  /* ---- SOW CRUD (Ingrid authenticated) ---- */
+  /* ---- SOW CRUD (Ingrid) ---- */
   function listSows() {
     return rest('/sows?order=updated_at.desc&select=id,customer,region,products,status,locked,progress_you,progress_ingrid,updated_at,updated_by,customer_token');
   }
@@ -88,14 +64,15 @@
   }
 
   function createSow(fields) {
-    // fields: { id, customer, region, products }
-    var body = Object.assign({ created_by: currentUser && currentUser.id, status: 'draft', locked: false, data: { fields: {}, lists: {} } }, fields);
-    return rest('/sows', { method: 'POST', headers: headers({ 'Prefer': 'return=representation' }), body: JSON.stringify(body) })
-      .then(function (rows) { return rows && rows[0]; });
+    var body = Object.assign({ status: 'draft', locked: false, data: { fields: {}, lists: {} } }, fields);
+    return rest('/sows', {
+      method: 'POST',
+      headers: headers({ 'Prefer': 'return=representation' }),
+      body: JSON.stringify(body)
+    }).then(function (rows) { return rows && rows[0]; });
   }
 
   function patchSow(id, body) {
-    // body: { data, updated_by, progress_you, progress_ingrid }
     return rest('/sows?id=eq.' + encodeURIComponent(id), {
       method: 'PATCH',
       headers: headers({ 'Prefer': 'return=minimal' }),
@@ -103,10 +80,23 @@
     });
   }
 
-  function lockSow(id) { return rpc('lock_sow', { p_id: id }); }
-  function unlockSow(id) { return rpc('unlock_sow', { p_id: id }); }
+  function lockSow(id) {
+    return rest('/sows?id=eq.' + encodeURIComponent(id), {
+      method: 'PATCH',
+      headers: headers({ 'Prefer': 'return=minimal' }),
+      body: JSON.stringify({ locked: true, status: 'complete' })
+    });
+  }
 
-  /* ---- customer (unauthenticated) ---- */
+  function unlockSow(id) {
+    return rest('/sows?id=eq.' + encodeURIComponent(id), {
+      method: 'PATCH',
+      headers: headers({ 'Prefer': 'return=minimal' }),
+      body: JSON.stringify({ locked: false })
+    });
+  }
+
+  /* ---- customer (token-based, no auth) ---- */
   function getCustomerSow(id, token) {
     return rpc('get_sow_for_customer', { p_id: id, p_token: token })
       .then(function (rows) { return rows && rows[0]; });
@@ -118,13 +108,11 @@
 
   /* ---- Realtime presence ---- */
   var ws = null;
-  var presenceCallbacks = {};
   var heartbeatInterval = null;
 
   function joinPresence(sowId, info, onUpdate) {
-    // Use Supabase Realtime v2 presence
     if (ws) { ws.close(); ws = null; }
-    var wsUrl = URL.replace('https://', 'wss://').replace('http://', 'ws://') + '/realtime/v1/websocket?apikey=' + KEY + '&vsn=1.0.0';
+    var wsUrl = SUPABASE_URL.replace('https://', 'wss://').replace('http://', 'ws://') + '/realtime/v1/websocket?apikey=' + KEY + '&vsn=1.0.0';
     ws = new WebSocket(wsUrl);
     var ref = 0;
     var joined = false;
@@ -133,7 +121,6 @@
     function send(msg) { if (ws.readyState === 1) ws.send(JSON.stringify(msg)); }
 
     ws.onopen = function () {
-      // join presence channel
       send({ topic: 'realtime:presence:sow:' + sowId, event: 'phx_join', payload: { config: { presence: { key: info.who + ':' + Date.now() } } }, ref: ++ref });
     };
 
@@ -141,11 +128,9 @@
       var msg = JSON.parse(e.data);
       if (msg.event === 'phx_reply' && !joined) {
         joined = true;
-        // track self
         send({ topic: 'realtime:presence:sow:' + sowId, event: 'presence', payload: { type: 'track', key: info.who + ':' + Date.now(), payload: info }, ref: ++ref });
       }
       if (msg.event === 'presence_state' || msg.event === 'presence_diff') {
-        // rebuild presenceState from diff
         if (msg.event === 'presence_state') presenceState = msg.payload || {};
         if (msg.event === 'presence_diff') {
           var joins = (msg.payload && msg.payload.joins) || {};
@@ -153,7 +138,6 @@
           Object.keys(joins).forEach(function (k) { presenceState[k] = joins[k]; });
           Object.keys(leaves).forEach(function (k) { delete presenceState[k]; });
         }
-        // flatten to array of metas
         var users = [];
         Object.keys(presenceState).forEach(function (k) {
           var metas = presenceState[k] && presenceState[k].metas;
@@ -163,7 +147,6 @@
       }
     };
 
-    // heartbeat every 25s
     heartbeatInterval = setInterval(function () {
       send({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: ++ref });
     }, 25000);
@@ -174,35 +157,16 @@
     if (ws) { ws.close(); ws = null; }
   }
 
-  /* ---- DB changes (for dashboard live updates) ---- */
-  function subscribeTable(table, onMessage) {
-    var wsUrl = URL.replace('https://', 'wss://').replace('http://', 'ws://') + '/realtime/v1/websocket?apikey=' + KEY + '&vsn=1.0.0';
-    var dbWs = new WebSocket(wsUrl);
-    var ref = 0;
-    dbWs.onopen = function () {
-      dbWs.send(JSON.stringify({ topic: 'realtime:' + table, event: 'phx_join', payload: { config: { broadcast: {}, presence: {} } }, ref: ++ref }));
-    };
-    dbWs.onmessage = function (e) {
-      var msg = JSON.parse(e.data);
-      if (msg.event === 'postgres_changes' || msg.event === 'INSERT' || msg.event === 'UPDATE' || msg.event === 'DELETE') {
-        if (onMessage) onMessage(msg);
-      }
-    };
-    return dbWs;
-  }
-
   /* ---- generate SOW id ---- */
   function genId() {
-    // SOW-NNNN where NNNN is somewhat unique
     return 'SOW-' + (2042 + Math.floor(Math.random() * 9000));
   }
 
   /* ---- export ---- */
   global.SowAPI = {
-    login: login,
+    checkPassword: checkPassword,
     restoreSession: restoreSession,
     logout: logout,
-    getUser: getUser,
     isIngrid: isIngrid,
     listSows: listSows,
     getSow: getSow,
@@ -214,7 +178,6 @@
     patchCustomerSow: patchCustomerSow,
     joinPresence: joinPresence,
     leavePresence: leavePresence,
-    subscribeTable: subscribeTable,
     genId: genId
   };
 })(window);

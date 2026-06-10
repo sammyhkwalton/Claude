@@ -5,8 +5,30 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-  /* Auth guard */
-  if (!SowAPI.restoreSession()) { window.location.href = 'login.html'; return; }
+  /* Auth guard — show password dialog if not authenticated */
+  var _authed = SowAPI.restoreSession();
+  if (!_authed) {
+    document.addEventListener('DOMContentLoaded', function () {
+      var pwScrim = document.getElementById('pwScrim');
+      var pwInput = document.getElementById('pwInput');
+      var pwSubmit = document.getElementById('pwSubmit');
+      var pwError = document.getElementById('pwError');
+      if (pwScrim) pwScrim.classList.add('show');
+      if (pwInput) setTimeout(function () { pwInput.focus(); }, 60);
+      function tryPassword() {
+        if (SowAPI.checkPassword(pwInput.value)) {
+          pwScrim.classList.remove('show');
+          loadSows();
+        } else {
+          pwError.style.display = 'block';
+          pwInput.value = '';
+          pwInput.focus();
+        }
+      }
+      if (pwSubmit) pwSubmit.addEventListener('click', tryPassword);
+      if (pwInput) pwInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryPassword(); });
+    });
+  }
 
   var SOWS = [];
   var STATUS_LABEL = { draft: 'Draft', customer: 'With customer', review: 'In review', complete: 'Complete' };
@@ -249,13 +271,13 @@
       if (e.key === 'Escape') $$('.scrim').forEach(function (sc) { sc.classList.remove('show'); });
     });
 
-    // Logout
+    // Logout — clears session and reloads to show password dialog
     var logoutBtn = $('#btnLogout');
     if (logoutBtn) logoutBtn.addEventListener('click', function () {
-      SowAPI.logout(); window.location.href = 'login.html';
+      SowAPI.logout(); window.location.reload();
     });
   }
 
-  loadSows();
   wire();
+  if (_authed) loadSows();
 })();

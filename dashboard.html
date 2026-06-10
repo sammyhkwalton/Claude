@@ -121,10 +121,28 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- ===================== PASSWORD DIALOG ===================== -->
+<div class="scrim" id="pwScrim" style="z-index:9999">
+  <div class="dialog" role="dialog" aria-modal="true" aria-label="Sign in">
+    <h2>Ingrid SOW Manager</h2>
+    <p class="dsub">Enter the Ingrid admin password to continue.</p>
+    <div class="dgrid">
+      <div class="dfield span2">
+        <label class="dlabel" for="pwInput">Password</label>
+        <input class="dctl" type="password" id="pwInput" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+    </div>
+    <div id="pwError" style="display:none;margin-top:10px;color:#B03030;font-size:13.5px">Incorrect password — try again.</div>
+    <div class="dialog-actions">
+      <button class="btn-solid" id="pwSubmit">Sign in</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  // TODO: Replace with your Supabase project values
   window.SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
   window.SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+  window.INGRID_ADMIN_PASSWORD = 'Xm4#Kp9$Lw2@Nv7';
 </script>
 <script src="api.js"></script>
 <script src="dashboard.js"></script>

@@ -337,7 +337,7 @@
   /* ---- presence ---- */
   function startPresence(sowRow) {
     var user = SowAPI.getUser();
-    var name = (user && user.user_metadata && user.user_metadata.name) || (user && user.email && user.email.split('@')[0]) || 'Ingrid';
+    var name = 'Ingrid';
     var info = isCustomer
       ? { who: 'customer', side: 'you', name: 'Customer' }
       : { who: 'ingrid', side: 'ingrid', name: name };
@@ -353,10 +353,7 @@
     isCustomer = !SowAPI.isIngrid() && !!customerToken;
 
     if (!sowId) {
-      // No id param — if Ingrid, redirect to dashboard
-      if (!SowAPI.isIngrid()) { window.location.href = 'login.html'; return; }
-      // If we're Ingrid and came from dashboard with a new SOW, id must be in URL
-      toast('No SOW id — go back to the dashboard');
+      document.body.innerHTML = '<p style="font:16px sans-serif;padding:40px">No SOW found — go back to the <a href="dashboard.html">dashboard</a>.</p>';
       return;
     }
 
