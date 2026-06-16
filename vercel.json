@@ -4,5 +4,11 @@
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/sow", "destination": "/sow.html" },
     { "source": "/login", "destination": "/login.html" }
+  ],
+  "functions": {
+    "api/sync-se.js": { "maxDuration": 60 }
+  },
+  "crons": [
+    { "path": "/api/sync-se", "schedule": "0 7 * * *" }
   ]
 }
